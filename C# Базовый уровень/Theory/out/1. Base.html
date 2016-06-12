@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>1. Base</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<style type="text/css">
+/* GitHub stylesheet for MarkdownPad (http://markdownpad.com) */
+/* Author: Nicolas Hery - http://nicolashery.com */
+/* Version: b13fe65ca28d2e568c6ed5d7f06581183df8f2ff */
+/* Source: https://github.com/nicolahery/markdownpad-github */
+
+/* RESET
+=============================================================================*/
+
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+/* BODY
+=============================================================================*/
+
+body {
+  font-family: Helvetica, arial, freesans, clean, sans-serif;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #333;
+  background-color: #fff;
+  padding: 20px;
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+body>*:first-child {
+  margin-top: 0 !important;
+}
+
+body>*:last-child {
+  margin-bottom: 0 !important;
+}
+
+/* BLOCKS
+=============================================================================*/
+
+p, blockquote, ul, ol, dl, table, pre {
+  margin: 15px 0;
+}
+
+/* HEADERS
+=============================================================================*/
+
+h1, h2, h3, h4, h5, h6 {
+  margin: 20px 0 10px;
+  padding: 0;
+  font-weight: bold;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1 tt, h1 code, h2 tt, h2 code, h3 tt, h3 code, h4 tt, h4 code, h5 tt, h5 code, h6 tt, h6 code {
+  font-size: inherit;
+}
+
+h1 {
+  font-size: 28px;
+  color: #000;
+}
+
+h2 {
+  font-size: 24px;
+  border-bottom: 1px solid #ccc;
+  color: #000;
+}
+
+h3 {
+  font-size: 18px;
+}
+
+h4 {
+  font-size: 16px;
+}
+
+h5 {
+  font-size: 14px;
+}
+
+h6 {
+  color: #777;
+  font-size: 14px;
+}
+
+body>h2:first-child, body>h1:first-child, body>h1:first-child+h2, body>h3:first-child, body>h4:first-child, body>h5:first-child, body>h6:first-child {
+  margin-top: 0;
+  padding-top: 0;
+}
+
+a:first-child h1, a:first-child h2, a:first-child h3, a:first-child h4, a:first-child h5, a:first-child h6 {
+  margin-top: 0;
+  padding-top: 0;
+}
+
+h1+p, h2+p, h3+p, h4+p, h5+p, h6+p {
+  margin-top: 10px;
+}
+
+/* LINKS
+=============================================================================*/
+
+a {
+  color: #4183C4;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* LISTS
+=============================================================================*/
+
+ul, ol {
+  padding-left: 30px;
+}
+
+ul li > :first-child, 
+ol li > :first-child, 
+ul li ul:first-of-type, 
+ol li ol:first-of-type, 
+ul li ol:first-of-type, 
+ol li ul:first-of-type {
+  margin-top: 0px;
+}
+
+ul ul, ul ol, ol ol, ol ul {
+  margin-bottom: 0;
+}
+
+dl {
+  padding: 0;
+}
+
+dl dt {
+  font-size: 14px;
+  font-weight: bold;
+  font-style: italic;
+  padding: 0;
+  margin: 15px 0 5px;
+}
+
+dl dt:first-child {
+  padding: 0;
+}
+
+dl dt>:first-child {
+  margin-top: 0px;
+}
+
+dl dt>:last-child {
+  margin-bottom: 0px;
+}
+
+dl dd {
+  margin: 0 0 15px;
+  padding: 0 15px;
+}
+
+dl dd>:first-child {
+  margin-top: 0px;
+}
+
+dl dd>:last-child {
+  margin-bottom: 0px;
+}
+
+/* CODE
+=============================================================================*/
+
+pre, code, tt {
+  font-size: 12px;
+  font-family: Consolas, "Liberation Mono", Courier, monospace;
+}
+
+code, tt {
+  margin: 0 0px;
+  padding: 0px 0px;
+  white-space: nowrap;
+  border: 1px solid #eaeaea;
+  background-color: #f8f8f8;
+  border-radius: 3px;
+}
+
+pre>code {
+  margin: 0;
+  padding: 0;
+  white-space: pre;
+  border: none;
+  background: transparent;
+}
+
+pre {
+  background-color: #f8f8f8;
+  border: 1px solid #ccc;
+  font-size: 13px;
+  line-height: 19px;
+  overflow: auto;
+  padding: 6px 10px;
+  border-radius: 3px;
+}
+
+pre code, pre tt {
+  background-color: transparent;
+  border: none;
+}
+
+kbd {
+    -moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    background-color: #DDDDDD;
+    background-image: linear-gradient(#F1F1F1, #DDDDDD);
+    background-repeat: repeat-x;
+    border-color: #DDDDDD #CCCCCC #CCCCCC #DDDDDD;
+    border-image: none;
+    border-radius: 2px 2px 2px 2px;
+    border-style: solid;
+    border-width: 1px;
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    line-height: 10px;
+    padding: 1px 4px;
+}
+
+/* QUOTES
+=============================================================================*/
+
+blockquote {
+  border-left: 4px solid #DDD;
+  padding: 0 15px;
+  color: #777;
+}
+
+blockquote>:first-child {
+  margin-top: 0px;
+}
+
+blockquote>:last-child {
+  margin-bottom: 0px;
+}
+
+/* HORIZONTAL RULES
+=============================================================================*/
+
+hr {
+  clear: both;
+  margin: 15px 0;
+  height: 0px;
+  overflow: hidden;
+  border: none;
+  background: transparent;
+  border-bottom: 4px solid #ddd;
+  padding: 0;
+}
+
+/* TABLES
+=============================================================================*/
+
+table th {
+  font-weight: bold;
+}
+
+table th, table td {
+  border: 1px solid #ccc;
+  padding: 6px 13px;
+}
+
+table tr {
+  border-top: 1px solid #ccc;
+  background-color: #fff;
+}
+
+table tr:nth-child(2n) {
+  background-color: #f8f8f8;
+}
+
+/* IMAGES
+=============================================================================*/
+
+img {
+  max-width: 100%
+}
+</style>
+</head>
+<body>
+<h1>База</h1>
+<hr />
+<h2>a) Переменные</h2>
+<p>Объявление:  </p>
+<pre><code>TypeName variableName;
+</code></pre>
+
+<p>Инициализация ссылочных типов</p>
+<pre><code>variableName = new TypeName(Params);
+Home home = new Home();
+string str = &quot; &quot;;
+</code></pre>
+
+<p>Инициализация структур</p>
+<pre><code>int five = 5;
+DateTime date = new DateTime();
+</code></pre>
+
+<p>var и dynamic </p>
+<pre><code>var - статическая переменная, обязательно инициализировать при объявлении
+dynamic - динамическая переменная. Run in Time.
+
+var lsd = &quot;YEEEH&quot;; // Type = string
+dynamic f;         // Type = dynamic
+dynamic a = 5;     // Type = dynamic(int)
+a = &quot;string Type&quot;;  // It's normal, ;( Type = dynamic(string)
+var b = a;          // Type = dynamic(string)
+if(a) return true;  // It's compiled, but on this line of code thowing exception.
+</code></pre>
+
+<h2>b) Строки</h2>
+<p>Строки в C# - string class.</p>
+<p>Объявление:</p>
+<pre><code>string strLala = &quot;lalalala&quot;;
+var strHello = &quot;hello&quot;; 
+</code></pre>
+
+<p>Перегруженные операторы:  </p>
+<ol>
+<li>конкатенация строк +, +=. При сложении строк создаётся новая строка.</li>
+<li>оператор == //str.Equals(str2);</li>
+<li>str[index] - взятие символа по индексу</li>
+</ol>
+<p>Свойства: </p>
+<p><code>Lenght</code> - длина строки</p>
+<p>Основные методы:</p>
+<p><code>int CompareTo(string);</code> - Compares two strings. -1 if obj &lt; param, 1 if obj &gt; param, 0 is obj == param.<br />
+<code>static string Format(string format, params object[] args);</code> - Format string, using &quot;{index param}&quot;.<br />
+<code>string[] Split(params char[] spl);</code> - Splits a string into substrings based on the strings in an array.<br />
+<code>int IndexOf(char ch);</code> - Looking for the first occurrence in string and return index.<br />
+<code>string Insert(string str, int index);</code> - Inserted at a specified index position in this instance, and return new string.<br />
+<code>static string Join(string delimiter, string[] array);</code> - Concatenates the elements of an object array, using the specified separator between each element.<br />
+<code>string Substring(int left, int right);</code> - Retrieves a substring from this instance.<br />
+<code>string ToLower();</code> - Returns a copy of this string converted to lowercase.
+<code>string ToUpper();</code> - Returns a copy of this string converted to uppercase.</p>
+<p>string неизменяемый тип (immutable)</p>
+<pre><code>// It's not good, because string is immutable type.
+// In such cases it is better to use StringBuilder class
+for(var i = 0; i &lt; 100; i++)
+{
+    strLala += strHello; // create a new string object at each iteration
+}
+
+// It's good
+var builder = new StringBuilder(&quot;lalalala&quot;);
+for(var i = 0; i &lt; 100; i++)
+{
+    builder.Append(strHello);
+}
+var result = builder.ToString();
+</code></pre>
+
+<h2>с) Циклы</h2>
+<h3>Цикл while</h3>
+<p>Сначала проверка, потом действие.<br />
+Конструкция:  </p>
+<pre><code>while(bool)
+{
+    // To do
+}
+</code></pre>
+
+<p>Пример:</p>
+<pre><code>var command = &quot;Hell&quot;;
+while(command != &quot;Exit from app&quot;)
+{
+    // To do
+    command = Console.ReadLine();
+}
+</code></pre>
+
+<h3>Цилк do-while</h3>
+<p>Сначала действие, потом проверка. Цикл пройдёт хотя бы одну итерацию.</p>
+<p>Конструкция:</p>
+<pre><code>do
+{
+    // To do
+} while(bool)
+</code></pre>
+
+<p>Пример: </p>
+<pre><code>do
+{   
+    // To do
+} while(&quot;Exit from app&quot; != Console.ReadLine())
+</code></pre>
+
+<h3>Цикл for</h3>
+<p>Конструкция:</p>
+<pre><code>for(init var; bool; action)
+{
+    //To do
+}
+</code></pre>
+
+<p>Пример: </p>
+<pre><code>for(var i = 0; i &lt; 100; i++)
+{
+    Console.WriteLine(&quot;Если Лёша платит мне деньги, то я люблю программировать.&quot;);
+}
+</code></pre>
+
+<h3>Цикл foreach</h3>
+<p>foreach проходит по элементам объектов, реализующих интерфейс <br />
+<code>System.Collections.IEnumerable</code> или <code>System.Collections.Generic.IEnumerable&lt;T&gt;</code>.</p>
+<p>Конструкция:  </p>
+<pre><code>foreach(var item in array)
+{
+    //To do
+}
+</code></pre>
+
+<p>Пример:</p>
+<pre><code>var listBook = new List&lt;Book&gt;() {
+    new Book() { Title = &quot;Clr via C#&quot;, Price = 5000},
+    new Book() { Title = &quot;Head first C#&quot;, Price = 2000},
+    ...
+}
+
+foreach(var book in listBook)
+{
+    Console.WriteLine(book.ToString());
+}
+
+out: 
+Clr via c# - 5000p
+Head first C# - 2000p
+...
+</code></pre>
+
+<h2>d) Методы</h2>
+<p>Различие методов по модификатору доступа:  </p>
+<blockquote>
+<p>private - виден только внутри класса<br />
+protected - виден только внутри класса и наследникам<br />
+internal - виден только в этом проекте<br />
+public - открыт</p>
+</blockquote>
+<p>По правилам хорошего кода на C# все методы принято писать с большой буквы, используя UpperCaseKakToTakTipo();</p>
+<p>Описание метода:</p>
+<pre><code>модификатор_доступа статик_или_ничего тип_возвращаемого_объекта название_метода(параметры)
+{
+    действия
+    return obj (Type = тип_возвращаемого_объекта)
+}
+</code></pre>
+
+<p>Вызов метода класса - через объект. </p>
+<p>Статические методы не привязаны к объекту. Вызов static метода - через класс или объект.</p>
+<pre><code>objectClass.NonStaticMethod();
+ClassName.StaticMethodCall();
+</code></pre>
+
+<p>Сигнатура двух методов в одном классе совпадать не должна, перегрузка допускается. </p>
+<p>Extended methods, расширенные методы - расширяют нужный нам класс. Создаём статический не вложенный класс, создаём метод с первым параметром (this desiredClass obj,..).</p>
+<p>для примера</p>
+<pre><code>public static class StringExtended
+{
+    public static int DoAnything(this string str)
+    {
+        //DoAnything
+        return 3;
+    }
+}
+...
+public static void Main(string[] args)
+{
+    var hell = &quot;Hell&quot;;
+    var three = hell.DoAnything();
+}
+</code></pre>
+
+<p>Generic методы</p>
+<pre><code>модификатор_доступа статик_или_нет тип_возвр_зн имя&lt;T1,...&gt;(...) {}
+</code></pre>
+
+<h1>e) Побитовые операции</h1>
+<hr />
+<pre><code>&amp; - и
+0 &amp; 0 = 0
+0 &amp; 1 = 0
+1 &amp; 0 = 0
+1 &amp; 1 = 1
+
+| - или
+0 | 0 = 0
+0 | 1 = 1
+1 | 0 = 1
+1 | 1 = 1
+
+^ - XOR
+0 | 0 = 0
+0 | 1 = 1
+1 | 0 = 1
+1 | 1 = 0
+
+~ - отрицание 
+~1 = 0
+~0 = 1
+</code></pre>
+
+<p>Шифратор дешифратор представлен в папке </p>
+<blockquote>
+<p>./Scrambler/</p>
+</blockquote>
+<h1>f) Рекурсия</h1>
+<hr />
+<p><strong>Рекурсия</strong> - вызов метода внутри метода этого же метода. <br />
+<strong>Хвостовая рекурсия</strong> - частный случай рекурсии, при котором любой рекурсивный вызов является последней операцией перед возвратом из функции.<br />
+Реализация числа Фибоначи представлена в папке.  </p>
+<blockquote>
+<p>./Recursion/</p>
+</blockquote>
+<h2>g) Стандартные контейнеры</h2>
+<h3>i) Array или []</h3>
+<p>Все массивы - наследники класса Array</p>
+<p>Объявление массива</p>
+<pre><code>int[] array = new int[5];
+int[] array0 = new int[] { 1, 2, 3, 4 };
+int[] array1  = {1, 2, 3, 4, 5};
+Array array2 = new int[5];
+</code></pre>
+
+<p>Многомерные массивы</p>
+<pre><code>int[,] array = new int[5,4];
+int[,,] array = new int[4,5,3];
+...
+</code></pre>
+
+<p>Ступенчатые массивы</p>
+<pre><code>int[][] array = new int[5][];
+array[1] = new int[3];
+array[2] = new int[4];
+array[3] = new int[5];
+...
+</code></pre>
+
+<p>Основные свойства и методы:</p>
+<pre><code>// Length
+var a = new int[4];
+var len = a.Length;
+var b = new int[4,5];
+b.GetLength(0); //4
+b.GetLength(1); //5
+
+// Sort
+var array = new int[4];
+Array.Sort(array, (a,b) =&gt; a.CompareTo(b))
+</code></pre>
+
+<h3>ii) List</h3>
+<p>Класс <code>List&lt;T&gt;</code> - Generic список</p>
+<p>namespace - <code>System.Collections.Generic</code></p>
+<p>Объявление</p>
+<pre><code>var listObj = new List&lt;object&gt;();
+
+var listObj = new List&lt;object&gt;() 
+{
+    new object(),
+    new object()
+};
+</code></pre>
+
+<p>Обращение к элементам по индексу</p>
+<pre><code>listObj[0] = new object();
+var obj = listObj[0];
+</code></pre>
+
+<p>Методы и свойства:</p>
+<p><code>void Add(T obj);</code> - Добавление в конец списка<br />
+<code>void Insert(int index, T obj);</code>- Добавление по индексу<br />
+<code>void RemoveAt(index);</code> - Удаление по индексу<br />
+<code>void Remove(T obj);</code> - Удаление<br />
+<code>void Sort();</code> - Сортировка <br />
+<code>void Sort((a,b) =&gt; int);</code> - Сортировка заданным компаратором<br />
+<code>int Count;</code> - Длина <br />
+<code>bool Contains(T obj);</code> - Содержит ли list объект obj<br />
+<code>int IndexOf(T obj);</code> - Возвращает индекс элемента<br />
+<code>T[] ToArray();</code> - В массив  </p>
+<h3>iii) Dictionary&lt;TKey, TValue&gt; словарь</h3>
+<p>namespace - <code>System.Collections.Generic</code></p>
+<p>Ключи повторяться не могут</p>
+<p>Объявление  </p>
+<pre><code>var dictionary = new Dictionary&lt;Type1, Type2&gt;();
+</code></pre>
+
+<p>Взятие по индексу</p>
+<pre><code>var dictionary = new Dictionary&lt;string, string&gt;();
+dictionary.Add(&quot;sting1&quot;, &quot;string1_res&quot;);
+
+var nString = dictionary[&quot;string1&quot;]; // &quot;string1_res&quot;
+</code></pre>
+
+<p>Методы и свойства</p>
+<p><code>int Count;</code> - Длина словаря<br />
+<code>Dictionary&lt;TKey, TValue&gt;.KeyCollection Keys;</code> - Коллекция ключей<br />
+<code>Dictionary&lt;TKey, TValue&gt;.ValueCollection Values;</code> - Коллекция значений<br />
+<code>void Add(TKey key, TValue value);</code> - Добавление<br />
+<code>bool ContainsKey(TKey key);</code> - Содержит ли ключ<br />
+<code>book ContainsValue(TValue value);</code> - Содержит ли значение<br />
+<code>void Remove(TKey key);</code> - Удаление</p>
+<h3>iv) Linq</h3>
+<p>Пространство имён - <code>System.Linq</code>  </p>
+<p>Операторы:</p>
+<pre><code>var books = new List&lt;Book&gt;() {...};
+
+var cheapBooksByAuthor = from book in books // Получение источника данных
+                         where book.Price &lt; 4 // Фильтрация
+                         orderby book.Name ascending // Сортировка по имени
+                         group book by book.Author // Группируем по авторам
+
+foreach(var bookGroup in cheapBooksByAuthor)
+{
+    foreach(var book in bookGroup)
+    {
+        Console.WriteLile(book.ToString()); // Выводим в консоль
+    }
+}
+
+var innerJoinQuery =
+    from cust in customers // Выбираем источник данных
+
+    // Находим всех customers and distributors, 
+    // которые находятся в одном городе.
+    join dist in distributors on cust.City equals dist.City 
+
+    //Создаём форму для возвращаемого эелмента
+    select new { CustomerName = cust.Name, DistributorName = dist.Name }; 
+</code></pre>
+
+<h3>v) Queue - очередь</h3>
+<p>Принцип работы - первый вошёл, первый вышел.</p>
+<p>Свойства и методы:  </p>
+<p><code>int Count;</code> - Длина очереди<br />
+<code>void Enqueue(T obj);</code> - Добавление в конец очереди<br />
+<code>T Dequeue();</code> - Читает и удаляет элемент с начала очереди<br />
+<code>T Peek();</code> - Читает элемент с головы начала<br />
+<code>void TreemExcess();</code> - Очищает очередь он пустых элементов  </p>
+
+</body>
+</html>
+<!-- This document was created with MarkdownPad, the Markdown editor for Windows (http://markdownpad.com) -->
