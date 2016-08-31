@@ -50,10 +50,11 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="ClassWithAttribute.cs" />
-    <Compile Include="ClassWitClassProperty.cs" />
-    <Compile Include="ClassWithClassField.cs" />
-    <Compile Include="ExampleClass.cs" />
+    <Compile Include="ClassesForTests\ClassWithAttribute.cs" />
+    <Compile Include="ClassesForTests\ClassWitClassProperty.cs" />
+    <Compile Include="ClassesForTests\ClassWithClassField.cs" />
+    <Compile Include="ClassesForTests\ClassWithPropertyException.cs" />
+    <Compile Include="ClassesForTests\ExampleClass.cs" />
     <Compile Include="TestCustomConvert.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

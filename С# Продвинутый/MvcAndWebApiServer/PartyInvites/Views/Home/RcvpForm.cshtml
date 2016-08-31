@@ -1,0 +1,55 @@
+﻿@model PartyInvites.Models.GuestResponse
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>RcvpForm</title>
+    <link rel="stylesheet" type="text/css" href="~/Content/Styles.css" />
+    <link href="~/Content/bootstrap.css" rel="stylesheet" />
+    <link href="~/Content/bootstrap-theme.css" rel="stylesheet" />
+    <style>
+        .body {
+            background-color: #f1f1f1
+        }
+    </style>
+</head>
+<body>
+    <div class="panel-heading text-center">
+        <h4>Форма заполнения</h4>
+    </div>
+    <div class="panel-body">
+        @using (Html.BeginForm())
+        {
+            @Html.ValidationSummary()
+            <div class="form-group">
+                <label>Ваше имя:</label>
+                @Html.TextBoxFor(t => t.Name, new { @class = "form-control" })
+            </div>
+            <div class="form-group">
+                <label>Ваш e-mail:</label>
+                @Html.TextBoxFor(t => t.Email, new { @class = "form-control" })
+            </div>
+            <div class="form-group">
+                <label>Ваш телефон:</label>
+                @Html.TextBoxFor(t => t.Phone, new { @class = "form-control" })
+            </div>
+            <div class="form-group">
+                <label>Вы придёте?</label>
+                @Html.DropDownListFor(t => t.WillAttend, new[] {
+                           new SelectListItem() { Text = "Да, конечно я буду", Value = Boolean.TrueString },
+                           new SelectListItem() { Text = "Нет, я точно не смогу", Value = Boolean.FalseString}
+                           }, new { @class = "form-control" })
+            </div>
+            <input type="submit" value="Отправить форму RSVP" class="btn btn-success" />
+        }
+    </div>
+
+    
+</body>
+</html>

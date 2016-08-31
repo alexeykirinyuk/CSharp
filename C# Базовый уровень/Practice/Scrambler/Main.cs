@@ -7,21 +7,19 @@ namespace Scrambler
 
 		public static void Main(string[] args)
 		{
-			var scrambler = new Scrambler("Привет, мой пароль от кары 2724");
+			var scrambler = new Scrambler("Привет, мой пароль от кары 2724", 10, 3);
 
-			string strBeforeEncrypt = scrambler.Data;
+			var beforeEncrypt = scrambler.Data;
 
 			scrambler.Encrypt();
-			string strEncrypt = scrambler.Data;
+			var encrypted = scrambler.Data;
 
 			scrambler.Deipher();
-			string stcDeipher = scrambler.Data;
+			var deiphered = scrambler.Data;
 
-			Console.WriteLine("strBeforeEncrypt = " + strBeforeEncrypt);
-			Console.WriteLine("strEncrypt = " + strEncrypt);
-			Console.WriteLine("stcDeipher = " + stcDeipher);
-
-			Console.ReadLine();
+			Console.WriteLine("String before encrypt = " + beforeEncrypt);
+			Console.WriteLine("String encrypted = " + encrypted);
+			Console.WriteLine("String deiphered = " + deiphered);
 		}
 	}
 }

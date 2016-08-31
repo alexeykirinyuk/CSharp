@@ -6,17 +6,10 @@ namespace Factory
 	{
 		public static void Main(string[] args)
 		{
-			God goodGod = new SonFactory();
-			
-			Console.WriteLine("Man God:");
-			goodGod.CreateChild();
-			goodGod.CreateGame();
+			var reader = File.GetReader(args[0]);
+			var readerString = reader.Read();
 
-			Console.WriteLine("Woman God: ");
-
-			God badGod = new DotherFactory();
-			badGod.CreateChild();
-			badGod.CreateGame();
+			Console.WriteLine(readerString);
 		}
 	}
 }

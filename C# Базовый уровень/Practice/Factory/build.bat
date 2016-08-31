@@ -1,1 +1,1 @@
-csc God.cs Main.cs
+csc DocumentManager.cs Main.cs

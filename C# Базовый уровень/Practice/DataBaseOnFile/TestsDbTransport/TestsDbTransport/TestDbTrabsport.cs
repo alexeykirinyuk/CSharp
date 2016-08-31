@@ -1,14 +1,19 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using DataBaseOnFile;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace TestsDbTransport
 {
     [TestClass]
     public class TestDbTransport
     {
+        private DbTransport _dataBase = DbTransport.Instance;
+
+        [TestInitialize]
+        public void Initialize()
+        {
+            _dataBase.Clear();
+        }
+
         [TestMethod]
         public void Instanse()
         {
@@ -22,149 +27,95 @@ namespace TestsDbTransport
         public void AddCar()
         {
             var addingCar = Generator.GenerateRandomCar();
+            
+            _dataBase.Add(addingCar);
 
-            var dbTransport = DbTransport.Instance;
-            dbTransport.Clear();
-
-            dbTransport.Add(addingCar);
-
-            Assert.AreEqual(1, dbTransport.Count);
-            Assert.AreSame(addingCar, dbTransport[0]);
+            Assert.AreEqual(1, _dataBase.Count);
+            Assert.AreSame(addingCar, _dataBase[0]);
         }
-        
+
+        [TestMethod]
+        public void GenerateId()
+        {
+            var camel = Generator.GenerateRandomCamel();
+            var car = Generator.GenerateRandomCar();
+
+            _dataBase.Add(car);
+            _dataBase.Add(camel);
+
+            Assert.AreEqual(car.TransportId, 0);
+            Assert.AreEqual(camel.TransportId, 1);
+
+            _dataBase.Remove(car);
+
+            Assert.AreEqual(camel, _dataBase[1]);
+        }
+
         [TestMethod]
         public void AddCamel()
         {
             var addingCamel = Generator.GenerateRandomCamel();
+            
+            _dataBase.Add(addingCamel);
 
-            var dbTransport = DbTransport.Instance;
-            dbTransport.Clear();
-            dbTransport.Add(addingCamel);
-
-            Assert.AreEqual(1, dbTransport.Count);
-            Assert.AreSame(addingCamel, dbTransport[0]);
+            Assert.AreEqual(1, _dataBase.Count);
+            Assert.AreSame(addingCamel, _dataBase[0]);
         }
 
-        [TestMethod]
-        public void AddThousandCar()
-        {
-            AddThousand<Car>();
-        }
-
-        [TestMethod]
-        public void AddThousandCamel()
-        {
-            AddThousand<Camel>();
-        }
-        
         [TestMethod]
         public void RemoveAt()
         {
-            var dbTransport = DbTransport.Instance;
-            dbTransport.Clear();
-            dbTransport.Add(Generator.GenerateRandomCamel());
+            _dataBase.Add(Generator.GenerateRandomCamel());
 
-            Assert.AreEqual(1, dbTransport.Count);
+            Assert.AreEqual(1, _dataBase.Count);
 
-            dbTransport.RemoveAt(0);
-            Assert.AreEqual(0, dbTransport.Count);
+            _dataBase.RemoveAt(0);
+            Assert.AreEqual(0, _dataBase.Count);
         }
 
         [TestMethod]
         public void Remove()
         {
-            var dbTransport = DbTransport.Instance;
-            dbTransport.Clear();
-
             var addingCar = Generator.GenerateRandomCar();
-            dbTransport.Add(addingCar);
+            _dataBase.Add(addingCar);
 
-            dbTransport.Remove(addingCar);
+            _dataBase.Remove(addingCar);
 
-            Assert.AreEqual(0, dbTransport.Count);
+            Assert.AreEqual(0, _dataBase.Count);
         }
 
         [TestMethod]
         public void DataStorage()
         {
-            var dbTransport = DbTransport.Instance;
-            dbTransport.Clear();
+            _dataBase.Add(Generator.GenerateRandomCar());
+            _dataBase.Add(Generator.GenerateRandomCamel());
 
-            dbTransport.Add(Generator.GenerateRandomCar());
-            dbTransport.Add(Generator.GenerateRandomCamel());
+            Assert.AreEqual(2, _dataBase.Count);
 
-            Assert.AreEqual(2, dbTransport.Count);
+            _dataBase.Save();
+            _dataBase.Clear();
 
-            dbTransport.Save();
-            dbTransport.Clear();
+            Assert.AreEqual(0, _dataBase.Count);
 
-            Assert.AreEqual(0, dbTransport.Count);
+            _dataBase.Load();
 
-            dbTransport.Load();
-
-            Assert.AreEqual(2, dbTransport.Count);
+            Assert.AreEqual(2, _dataBase.Count);
         }
 
         [TestMethod]
-        public void Insert()
+        public void AddThousand()
         {
-            var dbTransport = DbTransport.Instance;
-            dbTransport.Clear();
-
-            Transport[] addedTransports = new Transport[]
+            var counter = 0;
+            for (var i = 0; i < 500; i++)
             {
-                Generator.GenerateRandomCamel(),
-                Generator.GenerateRandomCar(),
-                Generator.GenerateRandomCar()
-            };
+                var car = Generator.GenerateRandomCar();
+                var camel = Generator.GenerateRandomCamel();
 
-            foreach(var transport in addedTransports)
-            {
-                dbTransport.Add(transport);
-            }
-            
-            Assert.AreEqual(dbTransport.Count, 3);
+                DbTransport.Instance.Add(car);
+                DbTransport.Instance.Add(camel);
 
-            var car = Generator.GenerateRandomCar();
-            dbTransport.Insert(1, car);
-
-            for(int i = 0; i < 1; i++)
-            {
-                Assert.AreEqual(dbTransport[i], addedTransports[i]);
-            }
-
-            Assert.AreEqual(dbTransport[1], car);
-
-            for(int i = 1; i < 3; i++)
-            {
-                Assert.AreEqual(dbTransport[i + 1], addedTransports[i]);
-            }
-        }
-
-        private void AddThousand<T>() 
-            where T : Transport, new()
-        {
-            DbTransport.Instance.Clear();
-
-            var rand = new Random();
-            for (var i = 0; i < 1000; i++)
-            {
-                var carCamel = rand.Next(1, 3);
-                Transport transport;
-                switch(carCamel)
-                {
-                    case 1:
-                        transport = Generator.GenerateRandomCar();
-                        break;
-                    case 2:
-                        transport = Generator.GenerateRandomCamel();
-                        break;
-                }
-                var addingTransport = Generator.GenerateRandomCamel();
-                DbTransport.Instance.Add(addingTransport);
-
-                Assert.AreSame(addingTransport, DbTransport.Instance[i]);
-                Assert.AreEqual(i, DbTransport.Instance[i].Transport_ID);
+                Assert.AreSame(car, _dataBase[counter++]);
+                Assert.AreSame(camel, _dataBase[counter++]);
             }
 
             Assert.AreEqual(1000, DbTransport.Instance.Count);

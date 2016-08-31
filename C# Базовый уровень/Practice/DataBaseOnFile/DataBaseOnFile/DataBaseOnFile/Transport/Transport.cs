@@ -8,7 +8,7 @@ namespace DataBaseOnFile
     {
         private int horsePower;
 
-        public long Transport_ID { get; set; }
+        public long TransportId { get; set; }
 
         public double Price { get; set; }
 
@@ -33,7 +33,7 @@ namespace DataBaseOnFile
 
         public override string ToString()
         {
-            var builder = new StringBuilder(Transport_ID.ToString()).Append("\t");
+            var builder = new StringBuilder(TransportId.ToString()).Append("\t");
             builder.Append(Price).Append("\t");
             builder.Append(Power).Append("\t");
             builder.Append(DateOfManufacture).Append("\t");

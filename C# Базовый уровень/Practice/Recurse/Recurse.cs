@@ -1,20 +1,25 @@
 using System;
 using System.Diagnostics;
+using System.Collections.Generic;
 
 namespace Recurse
 {
 	public class MainClass
 	{
+		private static Dictionary<long?, long?> dictionary;
+
 		public static void Main(string[] args)
 		{
 			var count = int.Parse(args[0]);
 
-			var sw = new Stopwatch();
-			sw.Start();
-			var res = Fib(count);
-			sw.Stop(); 
+			dictionary = new Dictionary<long?, long?>();
 
-			TimeSpan ts = sw.Elapsed;
+			var stopWatch = new Stopwatch();
+			stopWatch.Start();
+			var res = Fib(count);
+			stopWatch.Stop(); 
+
+			TimeSpan ts = stopWatch.Elapsed;
         	
         	string elapsedTime = String.Format("{0:00}:{1:00}:{2:00}.{3:00}",
             	ts.Hours, ts.Minutes, ts.Seconds,
@@ -24,16 +29,24 @@ namespace Recurse
 
 		public static long Fib(long n)
 		{
-			if(n > 1) 
+
+			long? found;
+			dictionary.TryGetValue(n, out found);
+			if(null != found) return (long)found; 
+
+			if(n > 2) 
 			{
-				return IterFib(1, 1, n - 2);
+				long fibNumber = Fib(n - 1) + Fib(n - 2);
+				Console.WriteLine(n + " : " +  fibNumber);
+				dictionary.Add(n, fibNumber);
+				return fibNumber;
 			}
 			else 
 			{
-				return n;
+				return 1;
 			}
 		}
-
+	/*
 		private static long IterFib(long prev, long current, long n)
 		{
 			Console.WriteLine("prev = " + prev + "; current = " + current + "; n = " + n);
@@ -46,5 +59,6 @@ namespace Recurse
 				return IterFib(current, prev + current, n - 1);
 			}
 		}
+		*/
 	}
 }

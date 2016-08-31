@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Newtonsoft.Json;
 using System.Text;
+using System.Linq;
 using System.IO;
 using System;
 
@@ -8,6 +9,8 @@ namespace DataBaseOnFile
 {
     public class DbTransport
     {
+        private const string dbFileName = "DataBase.db";
+
         private static DbTransport _dbTransport;
         private static object _blockObject = new object();
 
@@ -22,7 +25,7 @@ namespace DataBaseOnFile
                 {
                     lock (_blockObject)
                     {
-                        if(_dbTransport == null)
+                        if (_dbTransport == null)
                         {
                             _dbTransport = new DbTransport();
                         }
@@ -32,16 +35,20 @@ namespace DataBaseOnFile
             }
         }
 
+        private DbTransport()
+        {
+            _data = new List<Transport>();
+            _counterID = 0;
+        }
+
         public void Save()
         {
-            string dbJsonString = JsonConvert.SerializeObject(new JsonDbTransport(_counterID, _data), 
-                new JsonSerializerSettings() { TypeNameHandling = TypeNameHandling.Auto }); ;
+            var dbJsonString = new JsonDbTransport(_counterID, _data).Serialize();
 
-            using (var fileStream = new FileStream("DataBase.db", FileMode.Create, FileAccess.Write, FileShare.None))
+            using (var streamWriter = new StreamWriter(
+                new FileStream(dbFileName, FileMode.Create, FileAccess.Write, FileShare.None)))
             {
-                var streamWriter = new StreamWriter(fileStream);
                 streamWriter.WriteLine(dbJsonString);
-                streamWriter.Close();
             }
         }
 
@@ -49,12 +56,12 @@ namespace DataBaseOnFile
         {
             try
             {
-                string dbJsonString = "";
-                using (var fileStream = new FileStream("DataBase.db", FileMode.OpenOrCreate, FileAccess.Read, FileShare.None))
+                var dbJsonString = string.Empty;
+
+                using (var streamReader = new StreamReader(
+                    new FileStream(dbFileName, FileMode.OpenOrCreate, FileAccess.Read, FileShare.None)))
                 {
-                    var streamReader = new StreamReader(fileStream);
                     dbJsonString = streamReader.ReadToEnd();
-                    streamReader.Close();
                 }
 
                 if (null == dbJsonString || "" == dbJsonString)
@@ -62,35 +69,28 @@ namespace DataBaseOnFile
                     return;
                 }
 
-                var jsonDb = JsonConvert.DeserializeObject<JsonDbTransport>(dbJsonString, 
-                    new JsonSerializerSettings() { TypeNameHandling = TypeNameHandling.Auto});
+                var jsonDb = new JsonDbTransport(dbJsonString);
 
                 _data = jsonDb.Data ?? new List<Transport>();
                 _counterID = jsonDb.CounterId;
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 Console.WriteLine("Exception in Load: " + e.ToString());
             }
         }
 
-        private DbTransport()
-        {
-            _data = new List<Transport>();
-            _counterID = 0;
-        }
-
-        #region wrappers
-        public Transport this[int i]
+        #region Wrappers
+        public Transport this[long id]
         {
             get
             {
-                return _data[i];
+                return _data[GetIndexFromId(id)];
             }
 
             set
             {
-                _data[i] = value;
+                _data[GetIndexFromId(id)] = value;
             }
         }
 
@@ -104,7 +104,7 @@ namespace DataBaseOnFile
 
         public void Add(Transport transport)
         {
-            transport.Transport_ID = _counterID++;
+            transport.TransportId = _counterID++;
             _data.Add(transport);
         }
 
@@ -113,14 +113,9 @@ namespace DataBaseOnFile
             _data.Remove(transport);
         }
 
-        public void RemoveAt(int transportIndex)
+        public void RemoveAt(long id)
         {
-            _data.RemoveAt(transportIndex);
-        }
-
-        public void Insert(int index, Transport transport)
-        {
-            _data.Insert(index, transport);
+            _data.RemoveAt(GetIndexFromId(id));
         }
 
         public void Clear()
@@ -129,27 +124,64 @@ namespace DataBaseOnFile
             _counterID = 0;
         }
         #endregion
-        
+
+        private int GetIndexFromId(long id)
+        {
+            var transport = _data.Where(t => t.TransportId == id).FirstOrDefault();
+
+            if (null == transport) return -1;
+
+            return _data.IndexOf(transport);
+        }
+
         public override string ToString()
         {
             var builder = new StringBuilder("Transport_ID\tMark\tPrice\tHorsePower\tDateOfManufacture\tType\n");
-            
-            foreach(var transport in _data)
+
+            foreach (var transport in _data)
             {
                 builder.Append(transport.ToString()).Append("\n");
             }
             return builder.ToString();
         }
 
-        struct JsonDbTransport
+        class JsonDbTransport
         {
-            public long CounterId;
-            public List<Transport> Data;
+            [JsonProperty]
+            public long CounterId { get; set; }
+
+            [JsonProperty]
+            public List<Transport> Data { get; set; }
+
+            private long _counterId = 4;
+
+            public JsonDbTransport() { }
 
             public JsonDbTransport(long counterId, List<Transport> data)
             {
-                this.CounterId = counterId;
-                this.Data = data;
+                CounterId = counterId;
+                Data = data;
+            }
+
+            public JsonDbTransport(string json)
+            {
+                var value = JsonConvert.DeserializeObject<JsonDbTransport>(json, GetJsonSettings());
+
+                CounterId = value.CounterId;
+                Data = value.Data;
+            }
+
+            public string Serialize()
+            {
+                return JsonConvert.SerializeObject(this, GetJsonSettings());
+            }
+
+            private static JsonSerializerSettings GetJsonSettings()
+            {
+                return new JsonSerializerSettings()
+                {
+                    TypeNameHandling = TypeNameHandling.Auto
+                };
             }
         }
     }

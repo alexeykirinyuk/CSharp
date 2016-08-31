@@ -1,104 +1,141 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace CustomJsonSerializer
 {
-    public static class CustomConvert
+    /// <summary>
+    /// 
+    /// </summary>
+    public static class CustomConverter
     {
-        public static string Convert<T>(T obj)
+       /// <summary>
+       /// 
+       /// </summary>
+       /// <typeparam name="T"></typeparam>
+       /// <param name="object"></param>
+       /// <returns></returns>
+        public static string Convert<T>(T @object)
         {
-            var builder = new StringBuilder("{");
+            var result = string.Empty;
 
-            WriteProperties(builder, obj);
-            WriteFields(builder, obj);
+            if (null == @object)
+            {
+                result = "null";
+                return result;
+            }
 
-            builder.Remove(builder.Length - 1, 1);
-            builder.Append("}");
+            var type = @object.GetType();
 
+            if (typeof(string).Equals(type))
+            {
+                result = $"\"{@object}\"";
+            }
+            else if (typeof(double).Equals(type) || typeof(float).Equals(type))
+            {
+                result = @object.ToString().Replace(',', '.');
+            }
+            else if (typeof(bool).Equals(type))
+            {
+                result = ((@object as bool?) ?? false).ToString().ToLower();
+            }
+            else if (typeof(DateTime).Equals(type)) 
+            {
+                var dateTime = @object as DateTime?;
+                result = dateTime.Value.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ");
+            }
+            else if (type.IsArray)
+            {
+                result = ConvertArray(@object);
+            }
+            else if (type.IsClass || (type.IsValueType && !type.IsPrimitive))
+            {
+                result = ConvertObject(@object);
+            }
+            else if (type.IsPrimitive)
+            {
+                result = @object.ToString();
+            }
+            return result;
+        }
+
+        private static string ConvertObject<T>(T @object)
+        {
+            var stringBuilder = new StringBuilder();
+            stringBuilder.Append("{").Append(ConvertMembers(@object)).Append('}');
+            return stringBuilder.ToString();
+        }
+
+        private static string ConvertArray<T>(T @object)
+        {
+            var builder = new StringBuilder();
+            var array = @object as Array;
+            if (null == array)
+            {
+                return null;
+            }
+
+            builder.Append('[');
+
+            foreach(var element in array)
+            {
+                builder.Append(Convert(element)).Append(',');
+            }
+
+            builder.Remove(builder.Length - 1, 1).Append("]");
             return builder.ToString();
         }
 
-        private static void WriteProperties<T>(StringBuilder builder, T obj)
+        private static string ConvertMembers<T>(T @object)
         {
-            var typeObj = obj.GetType();
-            PropertyInfo[] properties = typeObj.GetProperties();
+            var builder = new StringBuilder();
+            var members = @object.GetType().GetMembers();
 
-            foreach (var property in properties)
+            foreach (var member in members)
             {
+                if ((MemberTypes.Field != member.MemberType && 
+                    MemberTypes.Property != member.MemberType)
+                    || Attribute.IsDefined(member, typeof(NonSerializedAttribute)))
+                {
+                    continue;
+                }
 
-                builder
-                    .Append("\"")
-                    .Append(property.Name)
-                    .Append("\"=");
-                if (property.PropertyType.Equals(typeof(string)))
+                var convertedObject = string.Empty;
+
+                try
                 {
-                    builder
-                        .Append("\"")
-                        .Append(property.GetValue(obj))
-                        .Append("\"")
-                        .Append(",");
+                    convertedObject = Convert(GetValue(member, @object));
+                    builder.Append($"\"{ member.Name }\"=").Append(convertedObject).Append(',');
                 }
-                else if(property.PropertyType.IsClass)
-                {
-                    builder.Append("{");
-                    Type type = property.PropertyType;
-                    WriteProperties(builder, property.GetValue(obj));
-                    WriteFields(builder, property.GetValue(obj));
-                    builder.Remove(builder.Length - 1, 1);
-                    builder.Append("},");
-                }
-                else
-                {
-                    builder
-                        .Append(property.GetValue(obj))
-                        .Append(",");
-                }
+                catch { }
             }
+            return builder.Remove(builder.Length - 1, 1).ToString();
         }
 
-        private static void WriteFields<T>(StringBuilder builder, T obj)
+        private static object GetValue<T>(MemberInfo member, T @object)
         {
-            var typeObj = obj.GetType();
-            FieldInfo[] fields = typeObj.GetFields();
-
-            foreach (var field in fields)
+            if (MemberTypes.Field == member.MemberType)
             {
-                if (Attribute.IsDefined(field, typeof(NonSerializedAttribute))) continue;
-
-                builder
-                    .Append("\"")
-                    .Append(field.Name)
-                    .Append("\"=");
-
-                if (field.FieldType.Equals(typeof(string)))
-                {
-                    builder
-                        .Append("\"")
-                        .Append(field.GetValue(obj))
-                        .Append("\"")
-                        .Append(",");
-                }
-                else if (field.FieldType.IsClass)
-                {
-                    builder.Append("{");
-                    Type type = field.FieldType;
-                    WriteProperties(builder, field.GetValue(obj));
-                    WriteFields(builder, field.GetValue(obj));
-                    builder.Remove(builder.Length - 1, 1);
-                    builder.Append("},");
-                }
-                else
-                {
-                    builder
-                        .Append(field.GetValue(obj))
-                        .Append(",");
-                }
+                return (member as FieldInfo).GetValue(@object);
             }
+            else if (MemberTypes.Property == member.MemberType)
+            {
+                return (member as PropertyInfo).GetValue(@object);
+            }
+            return null;
         }
 
+        private static Type GetType(MemberInfo member)
+        {
+            if (MemberTypes.Field == member.MemberType)
+            {
+                return (member as FieldInfo).FieldType;
+            }
+            else if (MemberTypes.Property == member.MemberType)
+            {
+                return (member as PropertyInfo).PropertyType;
+            }
+            return null;
+        }
     }
 }

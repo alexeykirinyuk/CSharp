@@ -7,26 +7,24 @@ namespace Scrambler
 	{
 		public string Data { get; private set; }
 
-		private int _numForXor;
+		private int _numberForXor;
 
-		private int _numForMinus;  
+		private int _numberForMinus;  
 
-		public Scrambler(string data)
+		public Scrambler(string data, int numberForXor, int numberForMinus)
 		{
 			this.Data = data;
-
-			Random rand = new Random();
-			_numForXor = rand.Next(1, 20);
-			_numForMinus = rand.Next(1, 10);
+			this._numberForXor = numberForXor;
+			this._numberForMinus = numberForMinus;
 		}
 
 		public void Encrypt()
 		{
 			var stringBuilder = new StringBuilder();
 
-			foreach(var ch in Data)
+			foreach(var oneChar in Data)
 			{
-				char encryptedChar = (char) (((int)ch ^ _numForXor) - _numForMinus);
+				var encryptedChar = (char) (((int)oneChar ^ _numberForXor) - _numberForMinus);
 				stringBuilder.Append(encryptedChar);
 			}
 
@@ -37,9 +35,9 @@ namespace Scrambler
 		{
 			var stringBuilder = new StringBuilder();
 
-			foreach(var ch in Data)
+			foreach(var oneChar in Data)
 			{
-				char encryptedChar = (char) (((int)ch + _numForMinus) ^ _numForXor);
+				var encryptedChar = (char) (((int)oneChar + _numberForMinus) ^ _numberForXor);
 				stringBuilder.Append(encryptedChar);
 			}
 

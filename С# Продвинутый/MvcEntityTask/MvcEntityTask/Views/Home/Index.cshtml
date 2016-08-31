@@ -1,0 +1,92 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <script src="~/scripts/jquery-1.9.0.min.js"></script>
+    <script type="text/javascript">
+        function GetReviews()
+        {
+            $.get('http://localhost:50673/Reviews/GetReviews', function(data) {
+                result.innerHTML = data;
+                alert('success');
+            });
+        }
+        function GetUserReviews()
+        {
+            $.get('http://localhost:50673/Reviews/GetUserReviews',{userKey:inputUserKey.value}, function (data) {
+                result.innerHTML = data;
+                alert('success');
+            });
+        }
+        function SingIn()
+        {
+            $.get('http://localhost:50673/Users/SingIn', {name:nameSingIn.value, password:passwordSingIn.value}, function (data) {
+                result.innerHTML = data;
+                alert('success');
+            });
+        }
+        function SingUp()
+        {
+            $.get('http://localhost:50673/Users/SingUp', { name: nameSingUp.value, password: passwordSingUp.value }, function (data) {
+                result.innerHTML = data;
+                alert('success');
+            });
+        }
+        function AddReview()
+        {
+            $.get('http://localhost:50673/Reviews/AddReview', { userKey:inputUserKey.value, comment : textAddingReview.value }, function (data) {
+                result.innerHTML = data;
+                alert('success');
+            })
+        }
+        function RemoveReview()
+        {
+            $.get('http://localhost:50673/Reviews/RemoveReview', { userKey: inputUserKey.value, reviewId: +removeReviewId.value }, function (data) {
+                result.innerHTML = data;
+                alert('success');
+            })
+        }
+    </script>
+</head>
+<body>
+    <h1>Всё будет хорошо</h1>
+    <div>
+        <input type="submit" value="GetReviews" onclick="GetReviews()" />
+    </div>
+    <br />
+    <div>
+        <input type="submit" value="GetUserReviews" onclick="GetUserReviews()" />
+    </div>
+    <br />
+    <div>
+        <input type="submit" value="SingUp" onclick="SingUp()" />
+        <label>Логин</label>
+        <input type="text" id="nameSingUp" />
+        <label>Пароль</label>
+        <input type="text" id="passwordSingUp" />
+    </div>
+    <br />
+    <div>
+        <input type="submit" value="Login" onclick="SingIn()" />
+        <label>Логин</label>
+        <input type="text" id="nameSingIn" />
+        <label>Пароль</label>
+        <input type="text" id="passwordSingIn" />
+    </div>
+    <br />
+    <div>
+        <input type="submit" value="AddReview" onclick="AddReview()" />
+        <textarea id="textAddingReview">бла бла бла</textarea>
+    </div>
+    <br />
+    <div>
+        <input type="submit" value="RemoveReview" onclick="RemoveReview()" />
+        Id: 
+        <input type="text" id="removeReviewId" />
+    </div>
+    <br />
+    <output id="result"></output>
+    <br />
+    <label>UserKey:</label>
+    <input type="text" id="inputUserKey"/>
+</body>
+</html>
